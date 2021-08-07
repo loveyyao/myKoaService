@@ -23,7 +23,8 @@ module.exports = function (sequelize, DataTypes) {
     },
     del_flag: {
       type: DataTypes.STRING(1),
-      allowNull: false
+      allowNull: false,
+      defaultValue: '0'
     },
     create_by: {
       type: DataTypes.STRING(32),

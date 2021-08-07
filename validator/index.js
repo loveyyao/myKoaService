@@ -6,6 +6,7 @@ module.exports = (data, rules) => {
     const value = data[rulesKey[i]]
     for (let j = 0; j < ruleList.length; j++) {
       const rule = ruleList[j]
+      // TODO 必填校验待优化，根据数据类型来判断
       if (rule.required && !value) {
         errorList.push({
           key: rulesKey[i],

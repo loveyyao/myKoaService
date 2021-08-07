@@ -1,5 +1,5 @@
 const Op = require('sequelize').Op
-const Test = require('../sequelizeConfig').Tset
+const Test = require('../sequelizeConfig').Test
 const getResponse = require('../utils/response')
 const utlis = require('../utils/utils')
 const validator = require('../validator')

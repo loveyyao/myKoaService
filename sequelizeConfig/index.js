@@ -27,5 +27,5 @@ sequelize.authenticate().then(() => {
 
 module.exports = {
   db: sequelize,
-  Tset: require('./entity/test')(sequelize, Sequelize)
+  Test: require('./entity/test')(sequelize, Sequelize)
 }
