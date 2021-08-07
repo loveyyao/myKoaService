@@ -2,14 +2,18 @@ const Op = require('sequelize').Op
 const Test = require('../sequelizeConfig').Tset
 const getResponse = require('../utils/response')
 const utlis = require('../utils/utils')
+const validator = require('../validator')
+const testRules = require('../validator/testRules')
 
 // 分页查询 page页码 size分页大小
-const selectTestList = async ctx => {
+const selectTestPageList = async ctx => {
   const query = ctx.request.query
   const page = query.page
   const size = query.size
-  if (!page) {
-    ctx.body = getResponse.error(null, 500, 'page不能为空')
+  // 校验参数
+  const valid = validator(query, testRules.page)
+  if (valid.length) {
+    ctx.body = getResponse.error(null, 500, valid[0].message)
     return
   }
   // 默认查询del_flag为0的，正常数据del_flag为1为已删除
@@ -51,6 +55,12 @@ const selectTestList = async ctx => {
 // 新增 返回当前新增的数据
 const addTest = async ctx => {
   const data = ctx.request.body
+  // 校验参数
+  const valid = validator(data, testRules.add)
+  if (valid.length) {
+    ctx.body = getResponse.error(null, 500, valid[0].message)
+    return
+  }
   const {
     name = null,
     code = null,
@@ -78,6 +88,6 @@ const addTest = async ctx => {
 }
 
 module.exports = {
-  ['GET test/list']: selectTestList,
+  ['GET test/list']: selectTestPageList,
   ['POST test/add']: addTest
 }
