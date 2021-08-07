@@ -6,9 +6,12 @@ const utlis = require('../utils/utils')
 // 分页查询 page页码 size分页大小
 const selectTestList = async ctx => {
   const query = ctx.request.query
-  const data = getResponse()
   const page = query.page
   const size = query.size
+  if (!page) {
+    ctx.body = getResponse.error(null, 500, 'page不能为空')
+    return
+  }
   // 默认查询del_flag为0的，正常数据del_flag为1为已删除
   const where = {
     del_flag: '0'
@@ -37,24 +40,17 @@ const selectTestList = async ctx => {
       offset: parseInt(page - 1),
       limit: parseInt(size)
     }).then(result => {
-    data.status = 200
-    data.data = {
+    ctx.body = getResponse.success({
       result: result.rows || [],
       total: result.count || 0
-    }
-    data.msg = '操作成功'
-    ctx.body = data
+    })
   }).catch(err => {
-    data.status = 500
-    data.data = err
-    data.msg = '服务器异常'
-    ctx.body = data
+    ctx.body = getResponse.error(err)
   })
 }
 // 新增 返回当前新增的数据
 const addTest = async ctx => {
   const data = ctx.request.body
-  const result = getResponse()
   const {
     name = null,
     code = null,
@@ -75,15 +71,9 @@ const addTest = async ctx => {
     update_by,
     update_time
   }).then(res => {
-    result.data = res
-    result.msg = '添加成功'
-    result.status = 200
-    ctx.body = result
+    ctx.body = getResponse.success(res)
   }).catch(err => {
-    result.data = err
-    result.msg = '添加失败'
-    result.status = 500
-    ctx.body = result
+    ctx.body = getResponse.error(err, 500, '添加失败')
   })
 }
 
