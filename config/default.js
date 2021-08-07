@@ -7,6 +7,7 @@ const config = {
     PASSWORD: 'ybs971011', // 密码
     PORT: '3306', // 数据库端口
     HOST: 'localhost' // 数据库地址
-  }
+  },
+  secret: 'ybs'
 }
 module.exports = config
