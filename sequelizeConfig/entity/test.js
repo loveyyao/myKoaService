@@ -41,5 +41,8 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true
     },
-  }, { tableName: 'base_test' })
+  }, {
+    tableName: 'base_test',
+    timestamps: false
+  })
 }
