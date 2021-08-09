@@ -8,42 +8,50 @@ module.exports = function (sequelize, DataTypes) {
       primaryKey: true, // 主键
       autoIncrement: true
     },
+    // 角色名称
     name: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
+    // 角色编码
     code: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    // 密码
+    // 描述
     description: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    del_flag: {
+    delFlag: {
       type: DataTypes.STRING(1),
       allowNull: false,
-      defaultValue: '0'
+      defaultValue: '0',
+      field: 'del_flag'
     },
-    create_by: {
+    createBy: {
       type: DataTypes.STRING(32),
-      allowNull: true
+      allowNull: true,
+      field: 'create_by'
     },
-    create_time: {
+    createTime: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      field: 'create_time'
     },
-    update_by: {
+    updateBy: {
       type: DataTypes.STRING(32),
-      allowNull: true
+      allowNull: true,
+      field: 'update_by'
     },
-    update_time: {
+    updateTime: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      field: 'update_time'
     }
   }, {
     tableName: 'base_role',
-    timestamps: false
+    timestamps: false,
+    underscored: true
   })
 }
