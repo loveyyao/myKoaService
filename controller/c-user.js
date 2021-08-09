@@ -53,9 +53,13 @@ const getUserInfo = async ctx => {
   }
   if (!info) return
   await User.findOne({
-    del_flag: '0',
-    id: {
-      [Op.eq]: info.id
+    where: {
+      del_flag: {
+        [Op.eq]: '0'
+      },
+      id: {
+        [Op.eq]: info.id
+      }
     }
   }).then(res => {
     ctx.body = getResponse.success(res)
