@@ -64,7 +64,14 @@ const addTest = async ctx => {
     return
   }
   // 根据token获取用户信息{ name: username, id: id }
-  const userInfo = await verify(token)
+  let userInfo = null
+  try {
+    userInfo = await verify(token)
+  } catch (e) {
+    userInfo = null
+    ctx.body = getResponse.error(e)
+  }
+  if (!userInfo) return
   const {
     name = null,
     code = null,

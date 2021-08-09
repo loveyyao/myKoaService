@@ -6,6 +6,7 @@ const utils = require('../utils/utils')
 const validator = require('../validator')
 const userRules = require('../validator/userRules')
 const config = require('../config/default')
+const verify = require('../utils/token_verify')
 
 const userLogin = async ctx => {
   const data = ctx.request.body
@@ -36,11 +37,34 @@ const userLogin = async ctx => {
     const token = jsonwebtoken.sign({
       name: user.username,
       id: user.id
-    }, config.secret, { expiresIn: '1h' })
+    }, config.secret, { expiresIn: '24h' })
     ctx.body = getResponse.success(token, 200, '登录成功')
   })
 }
 
+const getUserInfo = async ctx => {
+  const token = ctx.headers.authorization
+  let info = null
+  try {
+    info = await verify(token)
+  } catch (e) {
+    info = null
+    ctx.body = getResponse.error(e, '500', '获取用户信息失败')
+  }
+  if (!info) return
+  await User.findOne({
+    del_flag: '0',
+    id: {
+      [Op.eq]: info.id
+    }
+  }).then(res => {
+    ctx.body = getResponse.success(res)
+  }).catch(err => {
+    ctx.body = getResponse.error(err)
+  })
+}
+
 module.exports = {
-  ['POST user/login']: userLogin
+  ['POST user/login']: userLogin,
+  ['GET user/info']: getUserInfo
 }
