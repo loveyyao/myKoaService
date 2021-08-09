@@ -48,44 +48,56 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: false
     },
+    roleId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      field: 'role_id'
+    },
     // 状态 1正常 2 冻结
     status: {
       type: DataTypes.INTEGER,
       defaultValue: 1
-    },
-    del_flag: {
-      type: DataTypes.STRING(1),
-      allowNull: false,
-      defaultValue: '0'
     },
     // 职务
     post: {
       type: DataTypes.STRING(32),
       allowNull: true
     },
-    create_by: {
+    delFlag: {
+      type: DataTypes.STRING(1),
+      allowNull: false,
+      defaultValue: '0',
+      field: 'del_flag'
+    },
+    createBy: {
       type: DataTypes.STRING(32),
-      allowNull: true
+      allowNull: true,
+      field: 'create_by'
     },
-    create_time: {
+    createTime: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      field: 'create_time'
     },
-    update_by: {
+    updateBy: {
       type: DataTypes.STRING(32),
-      allowNull: true
+      allowNull: true,
+      field: 'update_by'
     },
-    update_time: {
+    updateTime: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      field: 'update_time'
     },
     // 身份（1普通成员 2上级）
-    user_identity: {
+    userIdentity: {
       type: DataTypes.INTEGER,
-      defaultValue: 1
+      defaultValue: 1,
+      field: 'user_identity'
     }
   }, {
     tableName: 'base_user',
-    timestamps: false
+    timestamps: false,
+    underscored: true
   })
 }

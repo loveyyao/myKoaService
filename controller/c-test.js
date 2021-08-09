@@ -125,10 +125,12 @@ const delTest = async ctx => {
     return
   }
   await Test.update({
-    del_flag: '1'
+    delFlag: '1'
   }, {
     where: {
-      id: query.id
+      id: {
+        [Op.eq]: query.id
+      }
     }
   }).then(res => {
     ctx.body = getResponse.success(res)
@@ -202,8 +204,8 @@ const updateTest = async ctx => {
     name: data.name,
     code: data.code,
     alias: data.alias,
-    update_by: userInfo.name,
-    update_time: utils.time()
+    updateBy: userInfo.name,
+    updateTime: utils.time()
   }, {
     where: {
       id: {
