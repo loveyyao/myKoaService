@@ -12,5 +12,13 @@ module.exports = {
         message: '密码不能为空'
       }
     ]
+  },
+  addRole: {
+    roleId: [
+      {
+        required: true,
+        message: '角色不能为空'
+      }
+    ]
   }
 }
