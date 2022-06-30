@@ -1,5 +1,5 @@
 const config = {
-  port: 3000, // 项目端口
+  port: 3001, // 项目端口
   // 数据库配置
   database: {
     DATABASE: 'ybs', // 数据库

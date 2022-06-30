@@ -46,6 +46,7 @@ const userLogin = async ctx => {
 }
 
 const getUserInfo = async ctx => {
+  const t = new Date().getTime() + ''
   const token = ctx.headers.authorization
   let info = null
   try {
@@ -56,8 +57,8 @@ const getUserInfo = async ctx => {
     ctx.body = getResponse.error(e, '500', '获取用户信息失败')
   }
   if (!info) return
-  User.belongsTo(Role, { foreignKey: 'role_id', targetKey: 'id', as: 'role' })
-  Role.hasMany(User, { foreignKey: { field: 'role_id', name: 'roleId', as: 'roleIdd' } })
+  // User.belongsTo(Role, { foreignKey: 'role_id', targetKey: 'id', as: 'role' + t.substring(t.length - 4) })
+  // Role.hasMany(User, { foreignKey: { field: 'role_id', name: 'roleId', as: 'roleIdd' } })
   // TODO 返回格式不太完美
   /*
   *  "id": "c904dfe3-a204-4ead-b75d-5fbdff339645",
@@ -85,34 +86,34 @@ const getUserInfo = async ctx => {
             "code": "admin"
         }
   * */
-  await User.findOne({
-    where: {
-      del_flag: {
-        [Op.eq]: '0'
-      },
-      id: {
-        [Op.eq]: info.id
-      }
-    },
-    include: [{
-      model: Role,
-      as: 'role',
-      where: {
-        del_flag: {
-          [Op.eq]: '0'
-        }
-      },
-      required: false, // required: true强制一个INNER JOIN，用于required: false强制一个LEFT JOIN
-      attributes: ['id', 'name', 'code']
-    }]
-    // raw: true
-  }).then(res => {
-    ctx.body = getResponse.success(res)
-  }).catch(err => {
-    ctx.body = getResponse.error(err)
-  })
+  // await User.findOne({
+  //   where: {
+  //     del_flag: {
+  //       [Op.eq]: '0'
+  //     },
+  //     id: {
+  //       [Op.eq]: info.id
+  //     }
+  //   },
+  //   include: [{
+  //     model: Role,
+  //     as: 'role' + t.substring(t.length - 4),
+  //     where: {
+  //       del_flag: {
+  //         [Op.eq]: '0'
+  //       }
+  //     },
+  //     required: false, // required: true强制一个INNER JOIN，用于required: false强制一个LEFT JOIN
+  //     attributes: ['id', 'name', 'code']
+  //   }]
+  //   // raw: true
+  // }).then(res => {
+  //   ctx.body = getResponse.success(res)
+  // }).catch(err => {
+  //   ctx.body = getResponse.error(err)
+  // })
   // 手动SQL
-/*  const data = await db.query(`SELECT
+  const data = await db.query(`SELECT
 	\`base_user\`.\`id\`,
 	\`base_user\`.\`username\`,
 	\`base_user\`.\`realname\`,
@@ -122,7 +123,6 @@ const getUserInfo = async ctx => {
 	\`base_user\`.\`sex\`,
 	\`base_user\`.\`email\`,
 	\`base_user\`.\`phone\`,
-	\`base_user\`.\`role_id\` AS \`roleId\`,
 	\`base_user\`.\`status\`,
 	\`base_user\`.\`post\`,
 	\`base_user\`.\`del_flag\` AS \`delFlag\`,
@@ -133,13 +133,7 @@ const getUserInfo = async ctx => {
 	\`base_user\`.\`user_identity\` AS \`userIdentity\`,
 	\`role\`.\`id\` AS \`roleId\`,
 	\`role\`.\`name\` AS \`roleName\`,
-	\`role\`.\`code\` AS \`roleCode\`,
-	\`role\`.\`description\` AS \`roleDescription\`,
-	\`role\`.\`del_flag\` AS \`roleDelFlag\`,
-	\`role\`.\`create_by\` AS \`roleCreateBy\`,
-	\`role\`.\`create_time\` AS \`roleCreateTime\`,
-	\`role\`.\`update_by\` AS \`roleUpdateBy\`,
-	\`role\`.\`update_time\` AS \`roleUpdateTime\`
+	\`role\`.\`code\` AS \`roleCode\`
 FROM
 	\`base_user\` AS \`base_user\`
 	left JOIN \`base_role\` AS \`role\` ON \`base_user\`.\`role_id\` = \`role\`.\`id\`
@@ -148,7 +142,7 @@ WHERE
 	\`base_user\`.\`del_flag\` = '0'
 	AND \`base_user\`.\`id\` = '${info.id}'
 	LIMIT 1;`, { type: QueryTypes.SELECT })
-  ctx.body = getResponse.success(data)*/
+  ctx.body = getResponse.success(data[0])
 }
 
 const addRole = async ctx => {
